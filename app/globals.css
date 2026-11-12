@@ -11,8 +11,8 @@
   --peach: #ffd9b3;
   --amber: #ffc58f;
   --ink: #1a1630;
-  --serif: var(--font-serif), Georgia, serif;
-  --sans: var(--font-sans), system-ui, sans-serif;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
 }
 
 * {
