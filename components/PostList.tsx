@@ -20,6 +20,9 @@ export default function PostList({ posts }: { posts: Post[] }) {
             <span className="post-title">{p.title}</span>
             {p.excerpt ? <p className="post-excerpt">{p.excerpt}</p> : null}
           </span>
+          {p.cover ? (
+            <img src={p.cover} alt="" className="post-thumb" loading="lazy" />
+          ) : null}
           <span className="post-date">{formatDate(p.date)}</span>
         </Link>
       ))}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import VisitorNav from "./VisitorNav";
 
 const LINKS = [
   { href: "/", label: "Beranda" },
@@ -31,6 +32,7 @@ export default function Header() {
             {l.label}
           </Link>
         ))}
+        <VisitorNav />
         <Link href="/ajak-bercakap" className="btn">
           Ajak Bercakap
         </Link>

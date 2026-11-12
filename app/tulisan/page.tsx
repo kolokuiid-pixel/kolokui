@@ -5,12 +5,17 @@ import PostList from "@/components/PostList";
 import { getPosts } from "@/lib/posts";
 import { RUBRIK, RUBRIK_SLUGS } from "@/lib/rubrik";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Tulisan",
-  description: "Semua tulisan Kolokui dari empat rubrik: Senja, Sabda, OMK, dan Ziarah.",
+  description:
+    "Semua tulisan Kolokui dari empat rubrik: Senja, Sabda, OMK, dan Ziarah.",
 };
 
-export default function Tulisan() {
+export default async function Tulisan() {
+  const posts = await getPosts();
+
   return (
     <>
       <Header />
@@ -29,7 +34,7 @@ export default function Tulisan() {
             </Link>
           ))}
         </nav>
-        <PostList posts={getPosts()} />
+        <PostList posts={posts} />
       </main>
     </>
   );

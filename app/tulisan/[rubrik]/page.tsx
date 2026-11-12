@@ -6,6 +6,8 @@ import PostList from "@/components/PostList";
 import { getPosts } from "@/lib/posts";
 import { RUBRIK, RUBRIK_SLUGS, isRubrik } from "@/lib/rubrik";
 
+export const revalidate = 60;
+
 type Props = { params: Promise<{ rubrik: string }> };
 
 export function generateStaticParams() {
@@ -21,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function RubrikPage({ params }: Props) {
   const { rubrik } = await params;
   if (!isRubrik(rubrik)) notFound();
+  const posts = await getPosts(rubrik);
 
   return (
     <>
@@ -43,7 +46,7 @@ export default async function RubrikPage({ params }: Props) {
             </Link>
           ))}
         </nav>
-        <PostList posts={getPosts(rubrik)} />
+        <PostList posts={posts} />
       </main>
     </>
   );

@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import { getPustaka } from "@/lib/posts";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Pustaka",
-  description: "Arsip makalah, bahan rekoleksi, dan materi presentasi yang bisa diunduh.",
+  description:
+    "Arsip makalah, bahan rekoleksi, dan materi presentasi yang bisa diunduh.",
 };
 
-export default function Pustaka() {
-  const items = getPustaka();
+export default async function Pustaka() {
+  const items = await getPustaka();
 
   return (
     <>
@@ -26,14 +29,14 @@ export default function Pustaka() {
             <p className="empty">Belum ada bahan di pustaka.</p>
           ) : (
             items.map((it) => (
-              <div key={it.judul} className="pustaka-item">
+              <div key={it.id} className="pustaka-item">
                 <div>
                   <span className="eyebrow">{it.jenis}</span>
                   <div className="post-title">{it.judul}</div>
                   <span className="soft">{it.tahun}</span>
                 </div>
                 {it.file ? (
-                  <a href={it.file} className="btn" download>
+                  <a href={it.file} className="btn">
                     Unduh
                   </a>
                 ) : (

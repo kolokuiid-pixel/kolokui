@@ -1,11 +1,16 @@
 import Link from "next/link";
 import Header from "@/components/Header";
-import PostList from "@/components/PostList";
-import { getPosts } from "@/lib/posts";
+import { FeaturedCards, PostCards } from "@/components/PostCards";
+import { getFeatured, getPosts } from "@/lib/posts";
+import { getSiteProfile } from "@/lib/profile";
 import { RUBRIK, RUBRIK_SLUGS } from "@/lib/rubrik";
 
-export default function Home() {
-  const latest = getPosts().slice(0, 6);
+export const revalidate = 60;
+
+export default async function Home() {
+  const [all, featured] = await Promise.all([getPosts(), getFeatured()]);
+  const latest = all.slice(0, 6);
+  const profile = await getSiteProfile();
 
   return (
     <>
@@ -38,22 +43,37 @@ export default function Home() {
           </div>
         </section>
 
+        {featured.length > 0 ? (
+          <section className="wrap section">
+            <h2 className="section-center">Pilihan</h2>
+            <FeaturedCards posts={featured} />
+          </section>
+        ) : null}
+
         <section className="wrap section">
           <h2>Tulisan terbaru</h2>
-          <PostList posts={latest} />
+          <PostCards posts={latest} />
+          <p style={{ marginTop: 32 }}>
+            <Link href="/tulisan" className="btn btn-ghost">
+              Semua tulisan
+            </Link>
+          </p>
         </section>
 
         <section className="about">
           <div className="wrap about-inner">
-            <div className="photo" role="img" aria-label="Tempat foto Romo">
-              [Foto Romo]
+            <div className="photo">
+              {profile.foto ? (
+                <img src={profile.foto} alt={profile.nama || "Foto Romo"} />
+              ) : (
+                "[Foto Romo]"
+              )}
             </div>
             <div className="about-text">
               <h2>Tentang Romo</h2>
               <p>
-                Imam diosesan dan pendamping orang muda. Di halaman ini, Romo
-                bercerita tentang panggilannya dan tentang kisah di balik nama
-                Kolokui.
+                {profile.peran ||
+                  "Imam diosesan dan pendamping orang muda. Di halaman ini, Romo bercerita tentang panggilannya dan tentang kisah di balik nama Kolokui."}
               </p>
               <Link href="/tentang" style={{ fontWeight: 600 }}>
                 Baca selengkapnya
